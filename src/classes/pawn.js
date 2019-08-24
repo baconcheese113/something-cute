@@ -33,6 +33,6 @@ export default class Pawn {
   }
 
   canAttack = () => {
-    return Date.now() > this.lastAttackTime + this.baseCooldown
+    return Date.now() > this.lastAttackTime + this.baseCooldown && this.HP > 0
   }
 }

@@ -73,7 +73,7 @@ export default function Character(props) {
   const init = React.useCallback(() => {
     enemyClass.setDamageHandler(damage => {
       console.log(`taking ${damage} damage`)
-      setHP(enemyClass.HP - damage)
+      setHP(enemyClass.HP)
     })
     enemyClass.setAttackHandler(time => {
       console.log('attacked!')

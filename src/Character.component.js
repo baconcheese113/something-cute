@@ -16,6 +16,7 @@ const StyledCharacter = styled.button`
   overflow: hidden;
   border: none;
   background-color: ${props => props.color};
+  filter: ${props => !props.alive && 'brightness(20%)'};
   cursor: pointer;
 `
 const Svg = styled.svg`
@@ -51,6 +52,8 @@ export default function Character(props) {
   const chargeRing = React.useRef()
   const chargeTimer = React.useRef()
 
+  const alive = characterClass.HP > 0
+
   React.useEffect(() => {
     setTotalChargeLength(chargeRing.current.getTotalLength())
   }, [chargeRing])
@@ -58,7 +61,7 @@ export default function Character(props) {
   const init = React.useCallback(() => {
     characterClass.setDamageHandler(damage => {
       console.log(`taking ${damage} damage`)
-      setHP(characterClass.HP - damage)
+      setHP(characterClass.HP)
     })
     characterClass.setAttackHandler(time => {
       console.log('attacked!')
@@ -75,13 +78,13 @@ export default function Character(props) {
   const handleClick = e => {
     e.stopPropagation()
     console.log('ATTACKING')
-    if (characterClass.canAttack()) onAttack(characterClass)
+    if (characterClass.canAttack() && alive) onAttack(characterClass)
   }
   const radius = 50
   console.log(`now is ${Date.now()} and time to beat is ${lastAttackTime + characterClass.baseCooldown}`)
 
   return (
-    <StyledCharacter color={characterClass.color} onClick={handleClick}>
+    <StyledCharacter color={characterClass.color} onClick={handleClick} alive={alive}>
       {HP}
       <Svg>
         <ChargeRing
