@@ -17,12 +17,12 @@ export default function Game() {
 
   const handleCharacterAttack = character => {
     const target = battleManager.current.getEnemyTarget()
-    character.attack(target)
+    if (target) character.attack(target)
   }
 
   const handleEnemyAttack = enemy => {
     const target = battleManager.current.getCharacterTarget()
-    enemy.attack(target)
+    if (target) enemy.attack(target)
   }
 
   return (
