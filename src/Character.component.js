@@ -56,6 +56,9 @@ export default function Character(props) {
 
   React.useEffect(() => {
     setTotalChargeLength(chargeRing.current.getTotalLength())
+    return () => {
+      window.clearTimeout(chargeTimer.current)
+    }
   }, [chargeRing])
 
   const init = React.useCallback(() => {

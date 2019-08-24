@@ -17,6 +17,7 @@ const StyledEnemy = styled.button`
   overflow: hidden;
   border: none;
   background-color: ${props => props.color};
+  filter: ${props => !props.alive && 'brightness(20%)'};
   cursor: pointer;
 `
 const Svg = styled.svg`
@@ -54,6 +55,8 @@ export default function Character(props) {
   const chargeTimer = React.useRef()
   const attackTimer = React.useRef()
 
+  const alive = enemyClass.HP > 0
+
   React.useEffect(() => {
     setTotalChargeLength(chargeRing.current.getTotalLength())
   }, [chargeRing])
@@ -68,6 +71,10 @@ export default function Character(props) {
 
   React.useEffect(() => {
     performAttack()
+    return () => {
+      window.clearTimeout(attackTimer.current)
+      window.clearTimeout(chargeTimer.current)
+    }
   }, [])
 
   const init = React.useCallback(() => {
@@ -89,7 +96,7 @@ export default function Character(props) {
   init()
 
   return (
-    <StyledEnemy color={enemyClass.color}>
+    <StyledEnemy color={enemyClass.color} alive={alive}>
       {HP}
       <Svg>
         <ChargeRing
