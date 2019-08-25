@@ -8,8 +8,14 @@ const recharge = totalChargeLength => {
     100%{stroke-dashoffset: 0;}
   `
 }
-
-const StyledEnemy = styled.button`
+const StyledEnemy = styled.div`
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 40px;
+`
+const EnemyButton = styled.button`
   position: relative;
   height: 100px;
   width: 100px;
@@ -46,6 +52,13 @@ const ChargeRing = styled.circle`
     stroke-dashoffset: 0;
   }
 `
+const HealthBar = styled.div`
+  width: ${props => props.healthPercent}%;
+  background-color: black;
+  height: 10px;
+  align-self: flex-start;
+`
+
 const radius = 50
 
 export default function Character(props) {
@@ -100,23 +113,26 @@ export default function Character(props) {
   init()
 
   return (
-    <StyledEnemy color={enemyClass.color} alive={alive}>
-      <img src={enemyClass.image} alt="Enemy" />
-      {HP}
-      <Svg>
-        <ChargeRing
-          ref={chargeRing}
-          cx={radius}
-          cy={radius}
-          r={radius - 6}
-          stroke="white"
-          strokeWidth="10"
-          strokeDasharray={totalChargeLength}
-          className={Date.now() > lastAttackTime + enemyClass.baseCooldown ? 'charged' : 'charging'}
-          cooldown={enemyClass.baseCooldown / 1000}
-          fill="none"
-        />
-      </Svg>
+    <StyledEnemy>
+      <EnemyButton color={enemyClass.color} alive={alive}>
+        <img src={enemyClass.image} alt="Enemy" />
+        {HP}
+        <Svg>
+          <ChargeRing
+            ref={chargeRing}
+            cx={radius}
+            cy={radius}
+            r={radius - 6}
+            stroke="white"
+            strokeWidth="10"
+            strokeDasharray={totalChargeLength}
+            className={Date.now() > lastAttackTime + enemyClass.baseCooldown ? 'charged' : 'charging'}
+            cooldown={enemyClass.baseCooldown / 1000}
+            fill="none"
+          />
+        </Svg>
+      </EnemyButton>
+      <HealthBar healthPercent={(HP / enemyClass.baseHP) * 100} />
     </StyledEnemy>
   )
 }

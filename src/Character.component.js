@@ -150,7 +150,7 @@ export default function Character(props) {
         </Svg>
       </CharacterButton>
       <AbilityButton canUseAbility={characterClass.canUseAbility()} onClick={handleAbilityClick}>
-        Use Ability
+        Use {characterClass.abilityTitle}
       </AbilityButton>
       <HealthBar healthPercent={(HP / characterClass.baseHP) * 100} />
     </StyledCharacter>
