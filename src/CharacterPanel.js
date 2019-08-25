@@ -8,7 +8,7 @@ const StyledCharacterPanel = styled.section`
   width: 100%;
   height: 30%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 `
 
 export default function CharacterPanel(props) {

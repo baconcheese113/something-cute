@@ -8,16 +8,27 @@ const recharge = totalChargeLength => {
   `
 }
 
-const StyledCharacter = styled.button`
+const StyledCharacter = styled.div`
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 40px;
+`
+const CharacterButton = styled.button`
   position: relative;
   height: 100px;
-  width: 100px;
+  width: 100%;
   border-radius: 50%;
   overflow: hidden;
   border: none;
   background-color: ${props => props.color};
   filter: ${props => !props.alive && 'brightness(20%)'};
   cursor: pointer;
+
+  img {
+    height: 63%;
+  }
 `
 const Svg = styled.svg`
   position: absolute;
@@ -41,6 +52,19 @@ const ChargeRing = styled.circle`
     stroke-dashoffset: 0;
   }
 `
+const AbilityButton = styled.button`
+  width: 90%;
+  height: ${props => (props.canUseAbility ? 150 : 0)}px;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+`
+const HealthBar = styled.div`
+  width: ${props => props.healthPercent}%;
+  background-color: black;
+  height: 10px;
+  align-self: flex-start;
+`
 
 export default function Character(props) {
   const { characterClass, onAttack } = props
@@ -48,9 +72,12 @@ export default function Character(props) {
   const [HP, setHP] = React.useState(characterClass.HP)
   const [lastAttackTime, setLastAttackTime] = React.useState(characterClass.lastAttackTime)
   const [totalChargeLength, setTotalChargeLength] = React.useState(0)
+  const [lastAbilityTime, setLastAbilityTime] = React.useState(characterClass.lastAbilityTime)
+  // const [abilityChargeLength, setAbilityChargeLength] = React.useState(0)
 
   const chargeRing = React.useRef()
   const chargeTimer = React.useRef()
+  const abilityTimer = React.useRef()
 
   const alive = characterClass.HP > 0
 
@@ -75,6 +102,14 @@ export default function Character(props) {
       }, characterClass.baseCooldown)
       setLastAttackTime(time)
     })
+    characterClass.setAbilityHandler(time => {
+      console.log('attacked!')
+      abilityTimer.current = setTimeout(() => {
+        // chargeRing.current.classList.remove('charging')
+        setLastAbilityTime(time)
+      }, characterClass.abilityCooldown)
+      setLastAbilityTime(time)
+    })
   }, [characterClass])
   init()
 
@@ -84,25 +119,30 @@ export default function Character(props) {
     if (characterClass.canAttack() && alive) onAttack(characterClass)
   }
   const radius = 50
-  console.log(`now is ${Date.now()} and time to beat is ${lastAttackTime + characterClass.baseCooldown}`)
+  console.log(`${HP / characterClass.baseHP}`)
 
   return (
-    <StyledCharacter color={characterClass.color} onClick={handleClick} alive={alive}>
-      {HP}
-      <Svg>
-        <ChargeRing
-          ref={chargeRing}
-          cx={radius}
-          cy={radius}
-          r={radius - 6}
-          stroke="white"
-          strokeWidth="10"
-          strokeDasharray={totalChargeLength}
-          className={Date.now() > lastAttackTime + characterClass.baseCooldown ? 'charged' : 'charging'}
-          cooldown={characterClass.baseCooldown / 1000}
-          fill="none"
-        />
-      </Svg>
+    <StyledCharacter>
+      <CharacterButton color={characterClass.color} onClick={handleClick} alive={alive}>
+        <img src={characterClass.image} alt="Character" />
+        {HP}
+        <Svg>
+          <ChargeRing
+            ref={chargeRing}
+            cx={radius}
+            cy={radius}
+            r={radius - 6}
+            stroke="white"
+            strokeWidth="10"
+            strokeDasharray={totalChargeLength}
+            className={Date.now() > lastAttackTime + characterClass.baseCooldown ? 'charged' : 'charging'}
+            cooldown={characterClass.baseCooldown / 1000}
+            fill="none"
+          />
+        </Svg>
+      </CharacterButton>
+      <AbilityButton canUseAbility={characterClass.canUseAbility()}>Use Ability</AbilityButton>
+      <HealthBar healthPercent={(HP / characterClass.baseHP) * 100} />
     </StyledCharacter>
   )
 }

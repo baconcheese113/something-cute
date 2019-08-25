@@ -1,12 +1,11 @@
 import Character from './character'
 import Enemy from './enemy'
 import { getRandomInt } from '../utils/helperFunctions'
+import Attacker from './attacker'
 
 export default class BattleManager {
   constructor() {
-    this.characters = Array(5)
-      .fill()
-      .map(() => new Character(80))
+    this.characters = [new Attacker(80), new Attacker(80), new Attacker(80)]
     this.enemies = []
 
     this.round = 0

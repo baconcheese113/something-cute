@@ -3,13 +3,20 @@ import styled from 'styled-components'
 import CharacterPanel from './CharacterPanel'
 import EnemyPanel from './EnemyPanel'
 import BattleManager from './classes/battleManager'
+import backgroundImage from './artbits/BG1.svg'
 
 const StyledGame = styled.section`
   position: relative;
   width: 100%;
-  max-width: 800px;
+  /* max-width: 1200px; */
   height: 100vh;
-  background-color: red;
+  background-color: #313131;
+  overflow: hidden;
+`
+const Background = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 `
 const StartButton = styled.button`
   position: absolute;
@@ -47,6 +54,7 @@ export default function Game() {
 
   return (
     <StyledGame>
+      <Background src={backgroundImage} alt="background" />
       <StartButton onClick={handleStartNextRound} disabled={!canAdvance}>
         Start Level {level}
       </StartButton>

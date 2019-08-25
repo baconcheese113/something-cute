@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { getRandomInt } from './utils/helperFunctions'
+import Enemy1 from './artbits/Enemy1.svg'
 
 const recharge = totalChargeLength => {
   return keyframes`
@@ -19,6 +20,10 @@ const StyledEnemy = styled.button`
   background-color: ${props => props.color};
   filter: ${props => !props.alive && 'brightness(20%)'};
   cursor: pointer;
+
+  img {
+    height: 63%;
+  }
 `
 const Svg = styled.svg`
   position: absolute;
@@ -97,6 +102,7 @@ export default function Character(props) {
 
   return (
     <StyledEnemy color={enemyClass.color} alive={alive}>
+      <img src={enemyClass.image} alt="Enemy" />
       {HP}
       <Svg>
         <ChargeRing
