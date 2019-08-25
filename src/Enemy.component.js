@@ -1,7 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { getRandomInt } from './utils/helperFunctions'
-import Enemy1 from './artbits/Enemy1.svg'
 
 const recharge = totalChargeLength => {
   return keyframes`

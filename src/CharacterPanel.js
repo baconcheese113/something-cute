@@ -12,12 +12,12 @@ const StyledCharacterPanel = styled.section`
 `
 
 export default function CharacterPanel(props) {
-  const { characters, onAttack } = props
+  const { characters, onAttack, onAbility } = props
 
   return (
     <StyledCharacterPanel>
       {characters.map(v => (
-        <Character key={v.id} characterClass={v} onAttack={onAttack} />
+        <Character key={v.id} characterClass={v} onAttack={onAttack} onAbility={onAbility} />
       ))}
     </StyledCharacterPanel>
   )

@@ -9,8 +9,11 @@ export default class Pawn {
     this.id = uuidv4()
     this.color = `#${getRandomIntRange(100000, 999999)}`
     this.lastAttackTime = Date.now() - 40000
+    this.lastAbilityTime = Date.now() - 40000
     this.baseCooldown = 2000 + getRandomInt(8000)
     this.abilityCooldown = 6000 + getRandomInt(2000)
+    this.regenHealthInterval = null
+    this.abilityTitle = 'Ability'
   }
 
   setAttackHandler = handler => {
@@ -46,5 +49,24 @@ export default class Pawn {
     this.useAbilityHandler = handler
   }
 
-  useAbility = () => {}
+  useAbility = () => {
+    const now = Date.now()
+    this.lastAbilityTime = now
+    this.useAbilityHandler(now)
+  }
+
+  setRegenHandler = handler => {
+    this.regenHealthHandler = handler
+  }
+
+  regenHealth = (incHealth, times) => {
+    window.clearInterval(this.regenHealthInterval)
+    let timesLeft = times
+    this.regenHealthInterval = setInterval(() => {
+      timesLeft -= 1
+      if (this.HP > 0 && this.HP < this.baseHP) this.HP = Math.min(this.HP + incHealth, this.baseHP)
+      this.regenHealthHandler()
+      if (timesLeft < 1) window.clearInterval(this.regenHealthInterval)
+    }, 500)
+  }
 }

@@ -2,10 +2,11 @@ import Character from './character'
 import Enemy from './enemy'
 import { getRandomInt } from '../utils/helperFunctions'
 import Attacker from './attacker'
+import Support from './support'
 
 export default class BattleManager {
   constructor() {
-    this.characters = [new Attacker(80), new Attacker(80), new Attacker(80)]
+    this.characters = [new Attacker(80), new Attacker(80), new Support(80)]
     this.enemies = []
 
     this.round = 0
@@ -39,5 +40,13 @@ export default class BattleManager {
     // if(this.characters.filter(val => val.HP > 0).length < 1) return true
     if (this.enemies.filter(val => val.HP > 0).length < 1) return true
     return false
+  }
+
+  applyTeamRegen = (caster, incHealth, times) => {
+    this.characters.forEach(c => {
+      if (c.HP > 0 && c !== caster) {
+        c.regenHealth(incHealth, times)
+      }
+    })
   }
 }

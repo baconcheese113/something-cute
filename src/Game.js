@@ -4,6 +4,8 @@ import CharacterPanel from './CharacterPanel'
 import EnemyPanel from './EnemyPanel'
 import BattleManager from './classes/battleManager'
 import backgroundImage from './artbits/BG1.svg'
+import Support from './classes/support'
+import Attacker from './classes/attacker'
 
 const StyledGame = styled.section`
   position: relative;
@@ -47,6 +49,15 @@ export default function Game() {
     }
   }
 
+  const handleCharacterAbility = character => {
+    if (character instanceof Support) {
+      battleManager.current.applyTeamRegen(character, character.regenIncHealth, character.regenTimes)
+      character.useAbility(null)
+    } else if (character instanceof Attacker) {
+      character.useAbility(null)
+    }
+  }
+
   const handleEnemyAttack = enemy => {
     const target = battleManager.current.getCharacterTarget()
     if (target) enemy.attack(target)
@@ -59,7 +70,11 @@ export default function Game() {
         Start Level {level}
       </StartButton>
       <EnemyPanel onAttack={handleEnemyAttack} enemies={battleManager.current.enemies} />
-      <CharacterPanel onAttack={handleCharacterAttack} characters={battleManager.current.characters} />
+      <CharacterPanel
+        onAbility={handleCharacterAbility}
+        onAttack={handleCharacterAttack}
+        characters={battleManager.current.characters}
+      />
     </StyledGame>
   )
 }

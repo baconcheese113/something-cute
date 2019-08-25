@@ -54,7 +54,8 @@ const ChargeRing = styled.circle`
 `
 const AbilityButton = styled.button`
   width: 90%;
-  height: ${props => (props.canUseAbility ? 150 : 0)}px;
+  margin-top: -30px;
+  height: ${props => (props.canUseAbility ? 110 : 0)}px;
   padding: 0;
   overflow: hidden;
   border: none;
@@ -67,7 +68,7 @@ const HealthBar = styled.div`
 `
 
 export default function Character(props) {
-  const { characterClass, onAttack } = props
+  const { characterClass, onAttack, onAbility } = props
 
   const [HP, setHP] = React.useState(characterClass.HP)
   const [lastAttackTime, setLastAttackTime] = React.useState(characterClass.lastAttackTime)
@@ -103,27 +104,34 @@ export default function Character(props) {
       setLastAttackTime(time)
     })
     characterClass.setAbilityHandler(time => {
-      console.log('attacked!')
+      console.log('ability!')
       abilityTimer.current = setTimeout(() => {
         // chargeRing.current.classList.remove('charging')
-        setLastAbilityTime(time)
+        setLastAbilityTime(time - 20000)
       }, characterClass.abilityCooldown)
       setLastAbilityTime(time)
+    })
+    characterClass.setRegenHandler(() => {
+      setHP(characterClass.HP)
     })
   }, [characterClass])
   init()
 
-  const handleClick = e => {
+  const handleAttackClick = e => {
     e.stopPropagation()
     console.log('ATTACKING')
     if (characterClass.canAttack() && alive) onAttack(characterClass)
   }
+  const handleAbilityClick = e => {
+    e.stopPropagation()
+    console.log('ABILITY')
+    if (characterClass.canUseAbility()) onAbility(characterClass)
+  }
   const radius = 50
-  console.log(`${HP / characterClass.baseHP}`)
 
   return (
     <StyledCharacter>
-      <CharacterButton color={characterClass.color} onClick={handleClick} alive={alive}>
+      <CharacterButton color={characterClass.color} onClick={handleAttackClick} alive={alive}>
         <img src={characterClass.image} alt="Character" />
         {HP}
         <Svg>
@@ -135,13 +143,15 @@ export default function Character(props) {
             stroke="white"
             strokeWidth="10"
             strokeDasharray={totalChargeLength}
-            className={Date.now() > lastAttackTime + characterClass.baseCooldown ? 'charged' : 'charging'}
+            className={characterClass.canAttack() ? 'charged' : 'charging'}
             cooldown={characterClass.baseCooldown / 1000}
             fill="none"
           />
         </Svg>
       </CharacterButton>
-      <AbilityButton canUseAbility={characterClass.canUseAbility()}>Use Ability</AbilityButton>
+      <AbilityButton canUseAbility={characterClass.canUseAbility()} onClick={handleAbilityClick}>
+        Use Ability
+      </AbilityButton>
       <HealthBar healthPercent={(HP / characterClass.baseHP) * 100} />
     </StyledCharacter>
   )

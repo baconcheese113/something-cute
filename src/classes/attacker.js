@@ -10,6 +10,7 @@ export default class Attacker extends Pawn {
     this.abilityLength = 2000
     this.isReflecting = false
     this.image = Enemy5
+    this.abilityTitle = 'Reflect'
   }
 
   takeDamage(attacker, damage) {
