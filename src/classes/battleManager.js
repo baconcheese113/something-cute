@@ -1,12 +1,12 @@
-import Character from './character'
 import Enemy from './enemy'
 import { getRandomInt } from '../utils/helperFunctions'
 import Attacker from './attacker'
 import Support from './support'
+import Tank from './tank'
 
 export default class BattleManager {
   constructor() {
-    this.characters = [new Attacker(80), new Attacker(80), new Support(80)]
+    this.characters = [new Tank(80), new Attacker(80), new Support(80)]
     this.enemies = []
 
     this.round = 0
@@ -31,7 +31,10 @@ export default class BattleManager {
   getCharacterTarget = () => {
     const validCharacters = this.characters.filter(val => val.HP > 0)
     if (validCharacters.length < 1) return null
-    const character = validCharacters[getRandomInt(validCharacters.length)]
+    console.log(this.characters)
+    const tauntCharacter = this.characters.find(c => c.isTaunting)
+    if (tauntCharacter) console.log(`found ${tauntCharacter}`)
+    const character = tauntCharacter || validCharacters[getRandomInt(validCharacters.length)]
     console.log(character.HP)
     return character
   }

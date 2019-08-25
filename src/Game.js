@@ -6,6 +6,7 @@ import BattleManager from './classes/battleManager'
 import backgroundImage from './artbits/BG1.svg'
 import Support from './classes/support'
 import Attacker from './classes/attacker'
+import Tank from './classes/tank'
 
 const StyledGame = styled.section`
   position: relative;
@@ -54,6 +55,9 @@ export default function Game() {
       battleManager.current.applyTeamRegen(character, character.regenIncHealth, character.regenTimes)
       character.useAbility(null)
     } else if (character instanceof Attacker) {
+      character.useAbility(null)
+    } else if (character instanceof Tank) {
+      console.log(character.useAbility)
       character.useAbility(null)
     }
   }

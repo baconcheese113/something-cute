@@ -15,6 +15,7 @@ export default class Attacker extends Pawn {
   }
 
   useAbility(target) {
+    console.log('support using ability')
     super.useAbility(target)
   }
 }

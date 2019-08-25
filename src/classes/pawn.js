@@ -20,46 +20,46 @@ export default class Pawn {
     this.attackHandler = handler
   }
 
-  attack = target => {
+  attack(target) {
     target.takeDamage(this, this.damage)
     const now = Date.now()
     this.lastAttackTime = now
     this.attackHandler(now)
   }
 
-  setDamageHandler = handler => {
+  setDamageHandler(handler) {
     this.takeDamageHandler = handler
   }
 
-  takeDamage = (attacker, damage) => {
+  takeDamage(attacker, damage) {
     this.HP -= damage
     console.log(`Now have ${this.HP}HP`)
     this.takeDamageHandler(damage)
   }
 
-  canAttack = () => {
+  canAttack() {
     return Date.now() > this.lastAttackTime + this.baseCooldown && this.HP > 0
   }
 
-  canUseAbility = () => {
+  canUseAbility() {
     return Date.now() > this.lastAbilityTime + this.abilityCooldown && this.HP > 0
   }
 
-  setAbilityHandler = handler => {
+  setAbilityHandler(handler) {
     this.useAbilityHandler = handler
   }
 
-  useAbility = () => {
+  useAbility() {
     const now = Date.now()
     this.lastAbilityTime = now
     this.useAbilityHandler(now)
   }
 
-  setRegenHandler = handler => {
+  setRegenHandler(handler) {
     this.regenHealthHandler = handler
   }
 
-  regenHealth = (incHealth, times) => {
+  regenHealth(incHealth, times) {
     window.clearInterval(this.regenHealthInterval)
     let timesLeft = times
     this.regenHealthInterval = setInterval(() => {

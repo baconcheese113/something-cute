@@ -11,6 +11,7 @@ export default class Attacker extends Pawn {
     this.isReflecting = false
     this.image = Enemy5
     this.abilityTitle = 'Reflect'
+    this.abilityTimer = null
   }
 
   takeDamage(attacker, damage) {
@@ -23,7 +24,13 @@ export default class Attacker extends Pawn {
   }
 
   useAbility(target) {
-    super.useAbility(target)
+    console.log('attacker using ability')
     this.isReflecting = true
+    super.useAbility(target)
+
+    window.clearTimeout(this.abilityTimer)
+    this.abilityTimer = setTimeout(() => {
+      this.isReflecting = false
+    }, this.abilityCooldown)
   }
 }
