@@ -13,7 +13,7 @@ const StyledCharacter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 40px;
+  margin: 0 ${props => props.hMargin}px;
 `
 const CharacterButton = styled.button`
   position: relative;
@@ -75,6 +75,7 @@ export default function Character(props) {
   const [totalChargeLength, setTotalChargeLength] = React.useState(0)
   const [lastAbilityTime, setLastAbilityTime] = React.useState(characterClass.lastAbilityTime)
   // const [abilityChargeLength, setAbilityChargeLength] = React.useState(0)
+  const [hMargin, setHMargin] = React.useState(0)
 
   const chargeRing = React.useRef()
   const chargeTimer = React.useRef()
@@ -127,10 +128,23 @@ export default function Character(props) {
     console.log('ABILITY')
     if (characterClass.canUseAbility()) onAbility(characterClass)
   }
+
+  const calcMargin = () => {
+    setHMargin(Math.min(Math.max(window.innerWidth - 300, 0) / 6, 40))
+  }
+
+  React.useEffect(() => {
+    calcMargin()
+    window.addEventListener('resize', calcMargin)
+    return () => {
+      window.removeEventListener('resize', calcMargin)
+    }
+  }, [])
+
   const radius = 50
 
   return (
-    <StyledCharacter>
+    <StyledCharacter hMargin={hMargin}>
       <CharacterButton color={characterClass.color} onClick={handleAttackClick} alive={alive}>
         <img src={characterClass.image} alt="Character" />
         {HP}

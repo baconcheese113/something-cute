@@ -1,14 +1,16 @@
 import Enemy from './enemy'
-import { getRandomInt } from '../utils/helperFunctions'
+import { getRandomInt, randomWeightedIndex } from '../utils/helperFunctions'
 import Attacker from './attacker'
 import Support from './support'
 import Tank from './tank'
+import Attacky from './attacky'
+import Speedy from './speedy'
 
 export default class BattleManager {
   constructor() {
     this.characters = [new Tank(80), new Attacker(80), new Support(80)]
     this.enemies = []
-
+    this.weightedList = [{ weight: 4, type: Speedy }, { weight: 2, type: Attacky }, { weight: 5, type: Enemy }]
     this.round = 0
   }
 
@@ -16,7 +18,12 @@ export default class BattleManager {
     this.round += 1
     this.enemies = Array(Math.min(this.round, 5))
       .fill()
-      .map(() => new Enemy(100))
+      .map(() => {
+        const index = randomWeightedIndex(this.weightedList)
+        if (index === 0) return new Speedy(100)
+        if (index === 1) return new Attacky(100)
+        return new Enemy(100)
+      })
     return this.round
   }
 
