@@ -53,7 +53,7 @@ const ChargeRing = styled.circle`
 `
 const HealthBar = styled.div`
   width: ${props => props.healthPercent}%;
-  background-color: black;
+  background-color: ${props => props.color};
   height: 10px;
   align-self: flex-start;
 `
@@ -131,7 +131,7 @@ export default function Character(props) {
           />
         </Svg>
       </EnemyButton>
-      <HealthBar healthPercent={(HP / enemyClass.baseHP) * 100} />
+      <HealthBar color={enemyClass.color} healthPercent={(HP / enemyClass.baseHP) * 100} />
     </StyledEnemy>
   )
 }

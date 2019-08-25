@@ -32,7 +32,7 @@ export default class Pawn {
   }
 
   takeDamage(attacker, damage) {
-    this.HP -= damage
+    this.HP = Math.max(this.HP - damage, 0)
     console.log(`Now have ${this.HP}HP`)
     this.takeDamageHandler(damage)
   }

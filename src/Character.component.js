@@ -56,15 +56,28 @@ const AbilityButton = styled.button`
   width: 90%;
   margin-top: -30px;
   height: ${props => (props.canUseAbility ? 110 : 0)}px;
+  margin-bottom: ${props => (props.canUseAbility ? 0 : 30)}px;
   padding: 0;
   overflow: hidden;
   border: none;
+  background-color: #313131;
+  color: #fff;
+  cursor: pointer;
+  transition: height 0.5s, margin-bottom 0.5s;
 `
 const HealthBar = styled.div`
   width: ${props => props.healthPercent}%;
-  background-color: black;
+  background-color: ${props => props.color};
   height: 10px;
   align-self: flex-start;
+`
+const HealthText = styled.p`
+  margin: 0;
+  font-size: 24px;
+  color: ${props => props.color};
+  background-color: rgba(0, 0, 0, 0.3);
+  text-shadow: 0 0 1rem #000;
+  padding: 2px 4px;
 `
 
 export default function Character(props) {
@@ -166,7 +179,10 @@ export default function Character(props) {
       <AbilityButton canUseAbility={characterClass.canUseAbility()} onClick={handleAbilityClick}>
         Use {characterClass.abilityTitle}
       </AbilityButton>
-      <HealthBar healthPercent={(HP / characterClass.baseHP) * 100} />
+      <HealthBar color={characterClass.color} healthPercent={(HP / characterClass.baseHP) * 100} />
+      <HealthText color={characterClass.color}>
+        {HP} / {characterClass.baseHP}
+      </HealthText>
     </StyledCharacter>
   )
 }

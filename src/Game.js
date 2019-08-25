@@ -25,7 +25,13 @@ const StartButton = styled.button`
   position: absolute;
   top: 0;
   left: 50%;
+  font-size: 20px;
   transform: translateX(-50%);
+  border-radius: 0 0 10px 10px;
+  padding: 10px 15px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: none;
+  cursor: pointer;
 `
 
 export default function Game() {
